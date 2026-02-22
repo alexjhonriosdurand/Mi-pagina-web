@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModHub - Plugins y Mods</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --darker: #080810;
+            --card-bg: #1a1a2e;
+            --text: #e2e8f0;
+            --yape: #742e8a;
+            --bcp: #002a8d; /* Azul oficial BCP */
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* Header & Button Shine */
+        header {
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .donate-nav-btn {
+            background: linear-gradient(135deg, var(--accent), #d97706);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--primary);
+        }
+
+        /* Payment Buttons Area */
+        .payment-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pay-card {
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid transparent;
+        }
+
+        .pay-card:hover { transform: translateY(-3px); }
+
+        .yape-card {
+            background: white;
+            color: var(--yape);
+            border-color: var(--yape);
+        }
+
+        .bcp-card {
+            background: #f4f4f4;
+            color: var(--bcp);
+            border-color: var(--bcp);
+        }
+
+        .pay-title { font-weight: 800; font-size: 0.9rem; margin-bottom: 5px; }
+        .pay-number { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }
+        .pay-hint { font-size: 0.7rem; opacity: 0.8; margin-top: 5px; }
+
+        .close-btn {
+            margin-top: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        main { padding-top: 100px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-family: 'Oxanium'; font-size: 1.5rem; font-weight: 700; color: var(--primary);">⚡ ModHub</div>
+        <button class="donate-nav-btn" onclick="openModal()">☕ APOYAR</button>
+    </header>
+
+    <main>
+        <h1 style="font-family: 'Oxanium'; font-size: 3rem;">Tus Mods Favoritos</h1>
+        <p>Selecciona una categoría para empezar.</p>
+    </main>
+
+    <div class="modal" id="donateModal">
+        <div class="modal-content">
+            <h2 style="font-family: 'Oxanium'; margin-bottom: 5px;">¡Apoya el Proyecto!</h2>
+            <p style="font-size: 0.9rem; color: #94a3b8;">Toca cualquier opción para copiar los datos.</p>
+
+            <div class="payment-grid">
+                
+                <div class="pay-card yape-card" onclick="copyData('900000000', 'Yape')">
+                    <span class="pay-title">🟣 YAPE / PLIN</span>
+                    <span class="pay-number" id="yapeNum">900 000 000</span>
+                    <span class="pay-hint">Clic para copiar número</span>
+                </div>
+
+                <div class="pay-card bcp-card" onclick="copyData('191-00000000-0-00', 'Cuenta BCP')">
+                    <span class="pay-title">🔵 CUENTA BCP</span>
+                    <span class="pay-number" style="font-size: 1.1rem;">191-00000000-0-00</span>
+                    <span class="pay-hint">Clic para copiar cuenta</span>
+                </div>
+
+            </div>
+
+            <button class="close-btn" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() { document.getElementById('donateModal').classList.add('active'); }
+        function closeModal() { document.getElementById('donateModal').classList.remove('active'); }
+
+        function copyData(value, type) {
+            // Limpiar guiones y espacios para el copiado
+            const cleanValue = value.replace(/[-\s]/g, '');
+            navigator.clipboard.writeText(cleanValue).then(() => {
+                alert("✅ " + type + " copiado: " + value);
+            });
+        }
+
+        window.onclick = function(e) {
+            if (e.target.className === 'modal active') closeModal();
+        }
+    </script>
+
+</body>
+</html>>
